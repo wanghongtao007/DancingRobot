@@ -3,6 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
     <bean class="com.redhat.bfarr.dance.DanceMoveData" id="dancemovedata"/>
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <propertyPlaceholder id="properties" location="classpath:componetConfig.properties" cache="false"/>
         <dataFormats>
             <json id="serializer" library="Jackson"/>
         </dataFormats>
@@ -32,7 +33,7 @@
             <setHeader headerName="Access-Control-Allow-Headers" id="_setHeader7">
                 <constant>x-requested-with</constant>
             </setHeader>
-            <transform id="_transform1">
+            <transform id="_transform1">  
                 <constant>OK</constant>
             </transform>
         </route>
@@ -67,8 +68,9 @@
                         <setHeader headerName="Exchange.CONTENT_TYPE" id="_setHeader4">
                             <constant>application/json</constant>
                         </setHeader>
-                        <to id="_to2" uri="http4://rhdemo.au.ngrok.io/command?bridgeEndpoint=true"/>
-                       
+                        <log id="_logenvaddr" message=" {{ngrok.address}}"/>
+                        <!-- <to id="_to2" uri="http4://bf41b7a1.ngrok.io/command?bridgeEndpoint=true"/> -->
+                         <to id="_to2" uri="{{ngrok.address}}"/> 
                     </otherwise>
                 </choice>
             </split>
